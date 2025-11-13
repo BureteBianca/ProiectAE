@@ -1,171 +1,46 @@
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from '@headlessui/react'
-import {
-  Bars3Icon,
-  XMarkIcon,
-  UserCircleIcon,
-  HeartIcon, // ❤️ importăm iconul
-} from '@heroicons/react/24/outline'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '../store/slices/userSlice'
-import { classNames } from '../utils/tailwind'
-
-const navigation = [
-  { name: 'Homepage', href: '/' },
-  { name: 'Products', href: '/products' },
-]
+// client/src/components/Navbar.jsx
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/slices/userSlice';
+import { selectFavorites } from '../store/slices/favoritesSlice';
+import { HeartIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 
 export default function Navbar() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-
-  const loggedIn = useSelector((state) => state.user.loggedIn)
-  const favorites = useSelector((state) => state.favorites?.items ?? []) // ✅ fallback sigur
-
-  const isActive = (href) => location.pathname === href
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loggedIn = useSelector(state => state.user.loggedIn);
+  const favorites = useSelector(selectFavorites);
 
   const handleAuthClick = () => {
     if (loggedIn) {
-      dispatch(logout())
-      navigate('/')
+      dispatch(logout());
+      navigate('/');
     } else {
-      navigate('/login')
+      navigate('/login');
     }
-  }
+  };
 
   return (
-    <Disclosure as="nav" className="relative bg-gray-800">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-          {/* Mobile menu button */}
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
-            </DisclosureButton>
-          </div>
-
-          {/* Logo + nav links */}
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
-            </div>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    aria-current={isActive(item.href) ? 'page' : undefined}
-                    className={classNames(
-                      isActive(item.href)
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-white/5 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right side: Favorites + Profile */}
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-
-            {/* ❤️ Favorites button */}
-            <button
-              onClick={() => navigate('/favorites')}
-              className="relative rounded-full p-1 text-gray-400 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              <span className="sr-only">View favorites</span>
-              <HeartIcon className="h-6 w-6" aria-hidden="true" />
-              {favorites.length > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full">
-                  {favorites.length}
-                </span>
-              )}
-            </button>
-
-            {/* 👤 Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">Open user menu</span>
-                <UserCircleIcon className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10 text-gray-400" />
-              </MenuButton>
-
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-              >
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Your profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <button
-                    onClick={handleAuthClick}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden hover:bg-gray-100"
-                  >
-                    {loggedIn ? 'Sign out' : 'Sign in'}
-                  </button>
-                </MenuItem>
-              </MenuItems>
-            </Menu>
-          </div>
-        </div>
+    <nav className="bg-gray-800 p-4 flex justify-between items-center">
+      <div className="flex space-x-6 items-center">
+        <Link to="/" className="text-white font-bold hover:text-gray-200">Home</Link>
+        <Link to="/products" className="text-gray-300 hover:text-white">Products</Link>
+        <Link to="/favorites" className="relative text-gray-300 hover:text-white">
+          <HeartIcon className="w-6 h-6" />
+          {favorites.length > 0 && (
+            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              {favorites.length}
+            </span>
+          )}
+        </Link>
       </div>
 
-      {/* Mobile menu panel */}
-      <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3">
-          {navigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="a"
-              href={item.href}
-              aria-current={isActive(item.href) ? 'page' : undefined}
-              className={classNames(
-                isActive(item.href)
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white',
-                'block rounded-md px-3 py-2 text-base font-medium',
-              )}
-            >
-              {item.name}
-            </DisclosureButton>
-          ))}
-        </div>
-      </DisclosurePanel>
-    </Disclosure>
-  )
+      <button
+        onClick={handleAuthClick}
+        className="text-gray-300 hover:text-white font-semibold"
+      >
+        {loggedIn ? 'Sign out' : 'Sign in'}
+      </button>
+    </nav>
+  );
 }
