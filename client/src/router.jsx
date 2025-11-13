@@ -1,8 +1,8 @@
-// client/src/router.jsx
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
+import FavoritesPage from "./pages/FavoritesPage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import CreateProductPage from "./pages/CreateProductPage";
@@ -15,45 +15,33 @@ export const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: "products",
-        element: <ProductsPage />,
-      },
-      // Protected routes - require authentication
+      // Public routes
+      { index: true, element: <HomePage /> },
+      { path: "products", element: <ProductsPage /> },
+
+      // Protected routes (user must be logged in)
       {
         element: <ProtectedLayout />,
-        children: [],
+        children: [
+          { path: "favorites", element: <FavoritesPage /> }, // favorite products
+        ],
       },
-      // Admin routes - require authentication AND admin role
+
+      // Admin routes (user must be admin)
       {
         element: <AdminRoute />,
         children: [
-          {
-            path: "products/create",
-            element: <CreateProductPage />,
-          },
-          {
-            path: "products/edit/:id",
-            element: <EditProductPage />,
-          },
+          { path: "products/create", element: <CreateProductPage /> },
+          { path: "products/edit/:id", element: <EditProductPage /> },
         ],
       },
-      // Auth routes - require the user to NOT be authenticated
+
+      // Auth routes (user must NOT be logged in)
       {
         element: <AuthLayout />,
         children: [
-          {
-            path: "register",
-            element: <Register />,
-          },
-          {
-            path: "login",
-            element: <Login />,
-          },
+          { path: "register", element: <Register /> },
+          { path: "login", element: <Login /> },
         ],
       },
     ],

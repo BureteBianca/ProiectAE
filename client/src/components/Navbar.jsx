@@ -1,7 +1,18 @@
-// client/src/components/Navbar.jsx
-
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from '@headlessui/react'
+import {
+  Bars3Icon,
+  XMarkIcon,
+  UserCircleIcon,
+  HeartIcon, // ❤️ importăm iconul
+} from '@heroicons/react/24/outline'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../store/slices/userSlice'
@@ -16,11 +27,11 @@ export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const loggedIn = useSelector((state) => state.user.loggedIn)
 
-  const isActive = (href) => {
-    return location.pathname === href
-  }
+  const loggedIn = useSelector((state) => state.user.loggedIn)
+  const favorites = useSelector((state) => state.favorites?.items ?? []) // ✅ fallback sigur
+
+  const isActive = (href) => location.pathname === href
 
   const handleAuthClick = () => {
     if (loggedIn) {
@@ -30,12 +41,13 @@ export default function Navbar() {
       navigate('/login')
     }
   }
+
   return (
     <Disclosure as="nav" className="relative bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
+          {/* Mobile menu button */}
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
@@ -43,6 +55,8 @@ export default function Navbar() {
               <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
             </DisclosureButton>
           </div>
+
+          {/* Logo + nav links */}
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
               <img
@@ -59,7 +73,9 @@ export default function Navbar() {
                     to={item.href}
                     aria-current={isActive(item.href) ? 'page' : undefined}
                     className={classNames(
-                      isActive(item.href) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white',
+                      isActive(item.href)
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white',
                       'rounded-md px-3 py-2 text-sm font-medium',
                     )}
                   >
@@ -69,8 +85,25 @@ export default function Navbar() {
               </div>
             </div>
           </div>
+
+          {/* Right side: Favorites + Profile */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            {/* Profile dropdown */}
+
+            {/* ❤️ Favorites button */}
+            <button
+              onClick={() => navigate('/favorites')}
+              className="relative rounded-full p-1 text-gray-400 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+            >
+              <span className="sr-only">View favorites</span>
+              <HeartIcon className="h-6 w-6" aria-hidden="true" />
+              {favorites.length > 0 && (
+                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full">
+                  {favorites.length}
+                </span>
+              )}
+            </button>
+
+            {/* 👤 Profile dropdown */}
             <Menu as="div" className="relative ml-3">
               <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                 <span className="absolute -inset-1.5" />
@@ -112,6 +145,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile menu panel */}
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
           {navigation.map((item) => (
@@ -121,7 +155,9 @@ export default function Navbar() {
               href={item.href}
               aria-current={isActive(item.href) ? 'page' : undefined}
               className={classNames(
-                isActive(item.href) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white',
+                isActive(item.href)
+                  ? 'bg-gray-900 text-white'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white',
                 'block rounded-md px-3 py-2 text-base font-medium',
               )}
             >
