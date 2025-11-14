@@ -22,25 +22,31 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 p-4 flex justify-between items-center">
-      <div className="flex space-x-6 items-center">
-        <Link to="/" className="text-white font-bold hover:text-gray-200">Home</Link>
-        <Link to="/products" className="text-gray-300 hover:text-white">Products</Link>
-        <Link to="/favorites" className="relative text-gray-300 hover:text-white">
-          <HeartIcon className="w-6 h-6" />
-          {favorites.length > 0 && (
-            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-              {favorites.length}
-            </span>
-          )}
-        </Link>
-      </div>
+  <div className="flex space-x-6 items-center">
+    <Link to="/" className="text-white font-bold hover:text-gray-200">Home</Link>
+    <Link to="/products" className="text-gray-300 hover:text-white">Products</Link>
+    <Link to="/favorites" className="relative text-gray-300 hover:text-white">
+      <HeartIcon className="w-6 h-6" />
+      {favorites.length > 0 && (
+        <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          {favorites.length}
+        </span>
+      )}
+    </Link>
+    {loggedIn && (
+      <Link to="/profile" className="text-gray-300 hover:text-white">
+        <UserCircleIcon className="w-6 h-6" />
+      </Link>
+    )}
+  </div>
 
-      <button
-        onClick={handleAuthClick}
-        className="text-gray-300 hover:text-white font-semibold"
-      >
-        {loggedIn ? 'Sign out' : 'Sign in'}
-      </button>
-    </nav>
+  <button
+    onClick={handleAuthClick}
+    className="text-gray-300 hover:text-white font-semibold"
+  >
+    {loggedIn ? 'Sign out' : 'Sign in'}
+  </button>
+</nav>
+
   );
 }

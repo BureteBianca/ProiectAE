@@ -6,7 +6,7 @@ import axios from 'axios';
  */
 export const fetchFavoritesAPI = async () => {
   try {
-    const response = await axios.get('/api/favorites'); // backend trebuie să returneze favorite doar pentru userul logat
+    const response = await axios.get('/api/favorites'); 
     return response.data;
   } catch (err) {
     console.error('Error fetching favorites:', err);
@@ -16,7 +16,6 @@ export const fetchFavoritesAPI = async () => {
 
 /**
  * Adaugă un produs la favorite
- * @param {Object} product - produsul care trebuie adăugat
  */
 export const addFavoriteAPI = async (product) => {
   try {
@@ -30,7 +29,6 @@ export const addFavoriteAPI = async (product) => {
 
 /**
  * Șterge un produs din favorite după ID
- * @param {string|number} productId - ID-ul produsului
  */
 export const removeFavoriteAPI = async (productId) => {
   try {

@@ -7,6 +7,7 @@ import './App.css'
 import { router } from './router.jsx'
 import { store } from './store/store.js'
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>

@@ -32,6 +32,36 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.get('/me', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.userId, {
+      attributes: ['name'] // aici alegem doar coloana "name"
+    });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found', data: {} });
+    }
+
+    res.status(200).json({ success: true, message: 'User retrieved successfully', data: { name: user.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error retrieving user', data: error.message });
+  }
+});
+
+router.put('/me', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.userId);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found', data: {} });
+
+    const updatedUser = await user.update({ name: req.body.name });
+    delete updatedUser.dataValues.password;
+
+    res.status(200).json({ success: true, message: 'User updated successfully', data: updatedUser });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error updating user', data: error.message });
+  }
+});
+
 router.put('/:id', verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
@@ -98,6 +128,8 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
+
+
 router.get('/:id', verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
@@ -121,6 +153,8 @@ router.get('/:id', verifyToken, async (req, res) => {
         res.status(500).json({success: false, message: 'Error retrieving user', data: error.message});
     }
 })
+
+
 
 
 module.exports = router;

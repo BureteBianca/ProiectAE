@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import CreateProductPage from "./pages/CreateProductPage";
 import EditProductPage from "./pages/EditProductPage";
+import ProfilePage from "./pages/ProfilePage"; // 🟢 importă pagina de profil
 import { ProtectedLayout, AuthLayout } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
 
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
         element: <ProtectedLayout />,
         children: [
           { path: "favorites", element: <FavoritesPage /> }, // favorite products
+          { path: "profile", element: <ProfilePage /> },       // 🟢 ruta profil
         ],
       },
 
