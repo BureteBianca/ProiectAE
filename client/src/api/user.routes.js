@@ -1,6 +1,6 @@
 // client/src/api/user.routes.js
 import { axiosNoAuth } from "../axios/axiosNoAuth";
-import axios from "axios"; // pentru request cu token
+import axios from "axios"; 
 
 // Înregistrare user (există deja)
 export const registerUser = async (userData) => {
@@ -13,14 +13,13 @@ export const registerUser = async (userData) => {
   }
 };
 
-// -----------------------------
 // Preluare date user
 export const fetchUser = async (userId, token) => {
   try {
     const { data } = await axios.get(`http://localhost:5000/users/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return data.data; // returnează obiectul user
+    return data.data; 
   } catch (err) {
     throw new Error(err.response?.data?.message || err.message);
   }
@@ -32,7 +31,7 @@ export const updateUser = async (userId, token, updateData) => {
     const { data } = await axios.put(`http://localhost:5000/users/${userId}`, updateData, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return data.data; // returnează user actualizat
+    return data.data; 
   } catch (err) {
     throw new Error(err.response?.data?.message || err.message);
   }

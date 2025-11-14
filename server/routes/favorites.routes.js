@@ -4,13 +4,11 @@ const { verifyToken } = require('../utils/token.js');
 
 const router = express.Router();
 
-/**
- * ✅ Adaugă un produs la favorite
- */
+
 router.post('/', verifyToken, async (req, res) => {
   try {
     const { productId } = req.body;
-    const userId = req.userId; // vine din token
+    const userId = req.userId; 
 
     // Verifică dacă produsul există
     const product = await Product.findByPk(productId);
@@ -32,9 +30,7 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * ✅ Obține toate favoritele unui user
- */
+
 router.get('/', verifyToken, async (req, res) => {
   try {
     const userId = req.userId;
@@ -49,9 +45,6 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * ❌ Șterge un produs din favorite
- */
 router.delete('/:productId', verifyToken, async (req, res) => {
   try {
     const userId = req.userId;

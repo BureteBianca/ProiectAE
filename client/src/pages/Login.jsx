@@ -31,7 +31,7 @@ export default function Login() {
     if (response?.success) {
       // Salvează token și userId în localStorage
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userId", response.data.id); // <-- foarte important
+      localStorage.setItem("userId", response.data.id); 
       dispatch(setToken(response.data));
 
       toast.success("Login successful! Redirecting...");

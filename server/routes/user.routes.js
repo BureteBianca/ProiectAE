@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findByPk(req.userId, {
-      attributes: ['name'] // aici alegem doar coloana "name"
+      attributes: ['name'] 
     });
 
     if (!user) {

@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 export default function FavoritesPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const favorites = useSelector(selectFavorites); // trebuie să fie array de produse
+  const favorites = useSelector(selectFavorites); 
 
   const handleRemoveFavorite = (productId) => {
-    dispatch(toggleFavorite(productId)); // toggleFavorite va elimina produsul dacă există
+    dispatch(toggleFavorite(productId)); 
   };
 
   if (!favorites || favorites.length === 0) {
